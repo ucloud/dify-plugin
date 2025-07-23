@@ -27,15 +27,15 @@ class ModelverseModelProvider(ModelProvider):
                 api_key=api_key,
                 base_url="https://deepseek.modelverse.cn/v1"
             )
+            models_response = client.models.list()
 
-            test_response = client.chat.completions.create(
-                model="deepseek-ai/DeepSeek-V3-0324",
-                messages=[{"role": "user", "content": "Hello"}],
-                max_tokens=1,
-                stream=False
-            )
-
-            if not test_response:
+            
+            if hasattr(models_response, 'error'):
+                error = models_response.error
+                if error.get('code') == 'auth_error' and 'missing token' in error.get('message', ''):
+                    raise CredentialsValidateFailedError("Invalid response from API")
+            
+            if not hasattr(models_response, 'data') or not models_response.data:
                 raise CredentialsValidateFailedError("Invalid response from API")
 
         except openai.AuthenticationError:
