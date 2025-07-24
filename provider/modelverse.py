@@ -29,7 +29,6 @@ class ModelverseModelProvider(ModelProvider):
             )
             models_response = client.models.list()
 
-            
             if hasattr(models_response, 'error'):
                 error = models_response.error
                 if error.get('code') == 'auth_error' and 'missing token' in error.get('message', ''):
