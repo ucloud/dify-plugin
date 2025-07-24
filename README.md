@@ -12,7 +12,7 @@ Compshare is a comprehensive model platform that provides access to various adva
 ### Configure
 After installation, you need to get API keys from [Compshare](https://console.compshare.cn/light-gpu/api-keys) and setup in Settings -> Model Provider.
 
-![readme.png](_assets/readme.png)
+![readme.png](_assets/readme_compshare.png)
 
 
 
