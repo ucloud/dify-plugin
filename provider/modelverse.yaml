@@ -1,6 +1,6 @@
 provider: modelverse
 label:
-  en_US: "Compshare"
+  en_US: "Compshare 优云智算"
 description:
   en_US: "Models provided by Compshare."
   zh_Hans: "Compshare 优云智算提供的模型。"
