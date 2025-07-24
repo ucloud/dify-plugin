@@ -35,7 +35,7 @@ from dify_plugin.entities.model.message import (
 
 class UcloudMaasLargeLanguageModel(LargeLanguageModel):
     """
-    Model class for ucloud-maas large language model.
+    Model class for  large language model.
     """
     
     def __init__(self, *args, **kwargs):

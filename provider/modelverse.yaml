@@ -1,20 +1,20 @@
 provider: modelverse
 label:
-  en_US: "UCloud 优刻得"
+  en_US: "Compshare"
 description:
-  en_US: "Models provided by modelverse."
-  zh_Hans: "UCloud Modelverse 提供的模型。"
+  en_US: "Models provided by Compshare."
+  zh_Hans: "Compshare 优云智算提供的模型。"
 icon_small:
-  en_US: "icon.png"
+  en_US: "compshare.png"
 icon_large:
-  en_US: "icon.png"
+  en_US: "compshare.png"
 background: "#E5E7EB"
 help:
   title:
-    en_US: "Get your API Key from UCloud Modelverse"
-    zh_Hans: "从 UCloud Modelverse 获取 API Key"
+    en_US: "Get your API Key from Compshare"
+    zh_Hans: "从 Compshare 优云智算获取 API Key"
   url:
-    en_US: "https://console.ucloud.cn/modelverse/experience/api-keys"
+    en_US: "https://console.compshare.cn/light-gpu/api-keys"
 supported_model_types:
   - llm
 configurate_methods:

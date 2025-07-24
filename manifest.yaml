@@ -1,18 +1,18 @@
 version: 0.0.1
 type: plugin
-author: ucloud
-name: "ucloud"
+author: compshare
+name: "compshare"
 label:
-  en_US: UCloud
-  ja_JP: UCloud
-  zh_Hans: "UCloud 优刻得"
-  pt_BR: UCloud
+  en_US: Compshare
+  ja_JP: Compshare
+  zh_Hans: "优云智算"
+  pt_BR: Compshare
 description:
-  en_US: "A Dify plugin that integrates UCloud as a model provider, enabling seamless AI model deployment and usage within Dify."
-  ja_JP: "UCloud をモデルプロバイダーとして統合する Dify プラグインで、Dify 内での AI モデルのシームレスなデプロイと利用を可能にします。"
-  zh_Hans: "兼容 UCloud Modelverse 的 Dify 插件。"
-  pt_BR: "Um plugin do Dify que integra o UCloud como provedor de modelos, permitindo a implantação e uso contínuos de modelos de IA no Dify."
-icon: icon.png
+  en_US: "A Dify plugin that integrates Compshare as a model provider, enabling seamless AI model deployment and usage within Dify."
+  ja_JP: "Compshare をモデルプロバイダーとして統合する Dify プラグインで、Dify 内での AI モデルのシームレスなデプロイと利用を可能にします。"
+  zh_Hans: "兼容 Compshare 优云智算的 Dify 插件。"
+  pt_BR: "Um plugin do Dify que integra o Compshare como provedor de modelos, permitindo a implantação e uso contínuos de modelos de IA no Dify."
+icon: compshare.png
 resource:
   memory: 268435456
   permission:
