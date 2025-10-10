@@ -1,7 +1,7 @@
-model: deepseek-ai/DeepSeek-Prover-V2
+model: ByteDance/doubao-seed-1.6-thinking
 label:
-  zh_Hans: DeepSeek-Prover-V2
-  en_US: DeepSeek-Prover-V2
+  zh_Hans: doubao-seed-1.6-thinking
+  en_US: doubao-seed-1.6-thinking
 model_type: llm
 features:
   - multi-tool-call
@@ -28,6 +28,7 @@ parameter_rules:
     use_template: response_format
 pricing:
   input: '0.004'
-  output: '0.016'
+  output: '0.012'
   unit: '0.001'
   currency: CNY
+
