@@ -1,7 +1,7 @@
 model: Qwen/QwQ-32B
 label:
-  zh_Hans: QwQ-32B
-  en_US: QwQ-32B
+  zh_Hans: Qwen/QwQ-32B
+  en_US: Qwen/QwQ-32B
 model_type: llm
 features:
   - multi-tool-call
@@ -23,13 +23,13 @@ parameter_rules:
     use_template: frequency_penalty
   - name: max_tokens
     use_template: max_tokens
-    default: 512
+    default: 16000
     min: 1
     max: 65535
   - name: response_format
     use_template: response_format
 pricing:
-  input: '0.002'
-  output: '0.006'
+  input: '0.004'
+  output: '0.016'
   unit: '0.001'
   currency: CNY
