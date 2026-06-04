@@ -29,8 +29,19 @@ FILTER_KEYWORDS = [
     "black-forest-labs",
     "kontext",
     "ocr",
+    "vidu",
+    "veo",
+    "text-to-sound",
+    "sora",
+    "step1x",
+    "pixverse",
+    "midjourney",
+    "happyhorse",
+    "kling",
+    "seedance",
+    "seedream",
 ]
-FILTER_EXACT = ["gpt-5.4-pro"]
+FILTER_EXACT = ["gpt-5.4-pro","easydoc-emr-mask","easydoc-extract","easydoc-fin-chat","easydoc-parse-premium"]
 
 YAML_TEMPLATE = """model: {model_id}
 label:
