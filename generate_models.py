@@ -13,7 +13,23 @@ API_URL = "https://api.modelverse.cn/v1/models"
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "llm")
 
 # Keywords to filter out (case-insensitive)
-FILTER_KEYWORDS = ["suno", "embedding", "rerank", "speech", "tts", "indextts", "codex", "publishers"]
+FILTER_KEYWORDS = [
+    "suno",
+    "embedding",
+    "rerank",
+    "speech",
+    "tts",
+    "indextts",
+    "codex",
+    "publishers",
+    "wan",
+    "image",
+    "video",
+    "flux",
+    "black-forest-labs",
+    "kontext",
+    "ocr",
+]
 FILTER_EXACT = ["gpt-5.4-pro"]
 
 YAML_TEMPLATE = """model: {model_id}

@@ -18,7 +18,7 @@ class ModelverseModelProvider(ModelProvider):
         """
         try:
             import openai
-            
+
             api_key = credentials.get("openai_api_key")
             if not api_key:
                 raise CredentialsValidateFailedError("API Key is required")
@@ -33,7 +33,7 @@ class ModelverseModelProvider(ModelProvider):
                 error = models_response.error
                 if error.get('code') == 'auth_error' and 'missing token' in error.get('message', ''):
                     raise CredentialsValidateFailedError("Invalid response from API")
-            
+
             if not hasattr(models_response, 'data') or not models_response.data:
                 raise CredentialsValidateFailedError("Invalid response from API")
 
