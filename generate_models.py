@@ -40,6 +40,7 @@ FILTER_KEYWORDS = [
     "kling",
     "seedance",
     "seedream",
+    "hailuo"
 ]
 FILTER_EXACT = ["gpt-5.4-pro","easydoc-emr-mask","easydoc-extract","easydoc-fin-chat","easydoc-parse-premium"]
 
