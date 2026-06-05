@@ -1,7 +1,7 @@
-model: claude-4-opus
+model: gemini-3.5-flash
 label:
-  zh_Hans: claude-4-opus
-  en_US: claude-4-opus
+  zh_Hans: gemini-3.5-flash
+  en_US: gemini-3.5-flash
 model_type: llm
 features:
   - multi-tool-call

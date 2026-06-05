@@ -1,7 +1,7 @@
-model: mimo-v2-pro
+model: gpt-5.5
 label:
-  zh_Hans: mimo-v2-pro
-  en_US: mimo-v2-pro
+  zh_Hans: gpt-5.5
+  en_US: gpt-5.5
 model_type: llm
 features:
   - multi-tool-call
@@ -11,7 +11,7 @@ features:
   - tool-call
 model_properties:
   mode: chat
-  context_size: 204800
+  context_size: 1000000
 parameter_rules:
   - name: temperature
     use_template: temperature

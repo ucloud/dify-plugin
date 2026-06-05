@@ -1,7 +1,7 @@
-model: gpt-4o-240806
+model: kimi-k2.6
 label:
-  zh_Hans: gpt-4o-240806
-  en_US: gpt-4o-240806
+  zh_Hans: kimi-k2.6
+  en_US: kimi-k2.6
 model_type: llm
 features:
   - multi-tool-call

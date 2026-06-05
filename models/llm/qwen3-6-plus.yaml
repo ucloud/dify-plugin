@@ -1,7 +1,7 @@
-model: deepseek-ai/DeepSeek-V3.2-Exp-Think
+model: qwen3.6-plus
 label:
-  zh_Hans: deepseek-ai/DeepSeek-V3.2-Exp-Think
-  en_US: deepseek-ai/DeepSeek-V3.2-Exp-Think
+  zh_Hans: qwen3.6-plus
+  en_US: qwen3.6-plus
 model_type: llm
 features:
   - multi-tool-call

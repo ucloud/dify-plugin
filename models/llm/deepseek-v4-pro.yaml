@@ -1,7 +1,7 @@
-model: deepseek-ai/DeepSeek-R1-Distill-Llama-70B
+model: deepseek-v4-pro
 label:
-  zh_Hans: deepseek-ai/DeepSeek-R1-Distill-Llama-70B
-  en_US: deepseek-ai/DeepSeek-R1-Distill-Llama-70B
+  zh_Hans: deepseek-v4-pro
+  en_US: deepseek-v4-pro
 model_type: llm
 features:
   - multi-tool-call

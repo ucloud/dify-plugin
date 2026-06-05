@@ -14,9 +14,10 @@ help:
     en_US: "Get your API Key from UCloud Modelverse"
     zh_Hans: "从 UCloud Modelverse 获取 API Key"
   url:
-    en_US: "https://console.ucloud.cn/modelverse/experience/api-keys"
+    en_US: "https://astraflow.ucloud.cn/modelverse/api-keys"
 supported_model_types:
   - llm
+  - text-embedding
 configurate_methods:
   - predefined-model
   - customizable-model
@@ -51,8 +52,12 @@ models:
   llm:
     predefined:
       - "models/llm/*.yaml"
+  text_embedding:
+    predefined:
+      - "models/text_embedding/*.yaml"
 extra:
   python:
     provider_source: provider/modelverse.py
     model_sources:
       - "models/llm/llm.py"
+      - "models/text_embedding/text_embedding.py"

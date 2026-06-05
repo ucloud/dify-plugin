@@ -1,7 +1,7 @@
-model: claude-opus-4.0-thinking
+model: glm-5.1
 label:
-  zh_Hans: claude-opus-4.0-thinking
-  en_US: claude-opus-4.0-thinking
+  zh_Hans: glm-5.1
+  en_US: glm-5.1
 model_type: llm
 features:
   - multi-tool-call

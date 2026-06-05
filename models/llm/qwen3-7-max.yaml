@@ -1,7 +1,7 @@
-model: deepseek-ai/DeepSeek-V3.1-Think
+model: qwen3.7-max
 label:
-  zh_Hans: deepseek-ai/DeepSeek-V3.1-Think
-  en_US: deepseek-ai/DeepSeek-V3.1-Think
+  zh_Hans: qwen3.7-max
+  en_US: qwen3.7-max
 model_type: llm
 features:
   - multi-tool-call

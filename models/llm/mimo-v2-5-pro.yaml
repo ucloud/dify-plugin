@@ -1,7 +1,7 @@
-model: o4-mini-deep-research
+model: mimo-v2.5-pro
 label:
-  zh_Hans: o4-mini-deep-research
-  en_US: o4-mini-deep-research
+  zh_Hans: mimo-v2.5-pro
+  en_US: mimo-v2.5-pro
 model_type: llm
 features:
   - multi-tool-call

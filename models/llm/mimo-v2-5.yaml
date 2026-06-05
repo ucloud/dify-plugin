@@ -1,7 +1,7 @@
-model: claude-opus-4-1
+model: mimo-v2.5
 label:
-  zh_Hans: claude-opus-4-1
-  en_US: claude-opus-4-1
+  zh_Hans: mimo-v2.5
+  en_US: mimo-v2.5
 model_type: llm
 features:
   - multi-tool-call

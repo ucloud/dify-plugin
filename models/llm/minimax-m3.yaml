@@ -1,7 +1,7 @@
-model: gpt-oss-120b
+model: MiniMax-M3
 label:
-  zh_Hans: gpt-oss-120b
-  en_US: gpt-oss-120b
+  zh_Hans: MiniMax-M3
+  en_US: MiniMax-M3
 model_type: llm
 features:
   - multi-tool-call
