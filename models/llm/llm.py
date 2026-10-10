@@ -1,4 +1,5 @@
 import logging
+import uuid
 from collections.abc import Generator
 from typing import Optional, Union, cast
 
@@ -29,6 +30,7 @@ from dify_plugin.entities.model.message import (
     PromptMessageContentType,
     PromptMessageTool,
     TextPromptMessageContent,
+    ToolPromptMessage,
     UserPromptMessage,
 )
 
@@ -66,11 +68,11 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
         :param user: unique user id
         :return: full response or stream response chunk generator result
         """
-        api_key = credentials.get("openai_api_key")
-        if not api_key:
+        key = credentials.get("openai_api_key")
+        if not key:
             raise CredentialsValidateFailedError("API Key is required")
 
-        client = self._get_client(api_key)
+        client = self._get_client(key)
 
         messages = [self._convert_prompt_message_to_dict(m) for m in prompt_messages]
 
@@ -82,11 +84,20 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
         }
 
         if tools:
-            request_params["functions"] = [
+            # Dify uses the current tool-calling message format (assistant
+            # `tool_calls` followed by `role=tool` messages).  Sending those
+            # messages together with the deprecated `functions` parameter is
+            # rejected by OpenAI-compatible gateways.
+            request_params.pop("functions", None)
+            request_params.pop("function_call", None)
+            request_params["tools"] = [
                 {
-                    "name": tool.name,
-                    "description": tool.description,
-                    "parameters": tool.parameters,
+                    "type": "function",
+                    "function": {
+                        "name": tool.name,
+                        "description": tool.description or "",
+                        "parameters": tool.parameters,
+                    },
                 }
                 for tool in tools
             ]
@@ -127,9 +138,15 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
         :param chunk_usage: Usage information from OpenAI API response
         :return: Updated LLMUsage object
         """
-        usage.prompt_tokens = chunk_usage.prompt_tokens or 0
-        usage.completion_tokens = chunk_usage.completion_tokens or 0
-        usage.total_tokens = chunk_usage.total_tokens or 0
+        usage.prompt_tokens = (
+            chunk_usage.prompt_tokens or 0
+        )
+        usage.completion_tokens = (
+            chunk_usage.completion_tokens or 0
+        )
+        usage.total_tokens = (
+            chunk_usage.total_tokens or 0
+        )
         
      
         return usage
@@ -140,8 +157,7 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
             stream = client.chat.completions.create(**request_params)
             is_reasoning_started = False
             full_assistant_content = ""
-            delta_assistant_message_function_call_storage = None
-            final_tool_calls = []
+            tool_call_storage: dict[int, AssistantPromptMessage.ToolCall] = {}
             prompt_tokens = 0
             completion_tokens = 0
             
@@ -155,8 +171,12 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
                 if not chunk.choices:
                     if hasattr(chunk, 'usage') and chunk.usage:
                         chunk_usage = chunk.usage
-                        prompt_tokens = chunk_usage.prompt_tokens or 0
-                        completion_tokens = chunk_usage.completion_tokens or 0
+                        prompt_tokens = (
+                            chunk_usage.prompt_tokens or 0
+                        )
+                        completion_tokens = (
+                            chunk_usage.completion_tokens or 0
+                        )
                     continue
                     
                 choice = chunk.choices[0]
@@ -165,30 +185,33 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
                 
                 if hasattr(chunk, 'usage') and chunk.usage:
                     chunk_usage = chunk.usage
-                    prompt_tokens = chunk_usage.prompt_tokens or 0
-                    completion_tokens = chunk_usage.completion_tokens or 0
+                    prompt_tokens = (
+                        chunk_usage.prompt_tokens or 0
+                    )
+                    completion_tokens = (
+                        chunk_usage.completion_tokens or 0
+                    )
 
-                assistant_message_function_call = delta.function_call
-                if delta_assistant_message_function_call_storage is not None:
-                    if assistant_message_function_call:
-                        if assistant_message_function_call.arguments:
-                            delta_assistant_message_function_call_storage.arguments += assistant_message_function_call.arguments
-                        continue
-                    else:
-                        assistant_message_function_call = delta_assistant_message_function_call_storage
-                        delta_assistant_message_function_call_storage = None
+                response_tool_calls = getattr(delta, "tool_calls", None)
+                if response_tool_calls:
+                    self._merge_response_tool_call_deltas(
+                        response_tool_calls, tool_call_storage
+                    )
                 else:
-                    if assistant_message_function_call:
-                        delta_assistant_message_function_call_storage = assistant_message_function_call
-                        if delta_assistant_message_function_call_storage.arguments is None:
-                            delta_assistant_message_function_call_storage.arguments = ""
-                        if not finish_reason:
-                            continue
-                
-                function_call = self._extract_response_function_call(assistant_message_function_call)
-                tool_calls = [function_call] if function_call else []
-                if tool_calls:
-                    final_tool_calls.extend(tool_calls)
+                    # Keep response compatibility with gateways that still
+                    # return the deprecated `function_call` shape.
+                    response_function_call = getattr(delta, "function_call", None)
+                    if response_function_call:
+                        self._merge_response_tool_call_deltas(
+                            [response_function_call], tool_call_storage
+                        )
+
+                tool_calls = []
+                if finish_reason and tool_call_storage:
+                    tool_calls = [
+                        tool_call_storage[index]
+                        for index in sorted(tool_call_storage)
+                    ]
 
                 delta_message = {}
                 
@@ -208,13 +231,17 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
                     
                     if finish_reason:
                         if not prompt_tokens:
-                            prompt_tokens = self._num_tokens_from_messages(request_params.get("model"), prompt_messages)
+                            prompt_tokens = (
+                                self._num_tokens_from_messages(request_params.get("model"), prompt_messages)
+                            )
                         if not completion_tokens:
                             full_assistant_prompt_message = AssistantPromptMessage(
-                                content=full_assistant_content, tool_calls=final_tool_calls
+                                content=full_assistant_content, tool_calls=tool_calls
                             )
-                            completion_tokens = self._num_tokens_from_messages(
-                                request_params.get("model"), [full_assistant_prompt_message]
+                            completion_tokens = (
+                                self._num_tokens_from_messages(
+                                    request_params.get("model"), [full_assistant_prompt_message]
+                                )
                             )
                         usage = self._calc_response_usage(
                             request_params.get("model"), credentials, prompt_tokens, completion_tokens
@@ -232,14 +259,22 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
                     )
                 
                 elif finish_reason:
+                    tool_calls = [
+                        tool_call_storage[index]
+                        for index in sorted(tool_call_storage)
+                    ]
                     if not prompt_tokens:
-                        prompt_tokens = self._num_tokens_from_messages(request_params.get("model"), prompt_messages)
+                        prompt_tokens = (
+                            self._num_tokens_from_messages(request_params.get("model"), prompt_messages)
+                        )
                     if not completion_tokens:
                         full_assistant_prompt_message = AssistantPromptMessage(
-                            content=full_assistant_content, tool_calls=final_tool_calls
+                            content=full_assistant_content, tool_calls=tool_calls
                         )
-                        completion_tokens = self._num_tokens_from_messages(
-                            request_params.get("model"), [full_assistant_prompt_message]
+                        completion_tokens = (
+                            self._num_tokens_from_messages(
+                                request_params.get("model"), [full_assistant_prompt_message]
+                            )
                         )
                     usage = self._calc_response_usage(
                         request_params.get("model"), credentials, prompt_tokens, completion_tokens
@@ -249,7 +284,9 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
                         prompt_messages=[],
                         delta=LLMResultChunkDelta(
                             index=choice.index,
-                            message=AssistantPromptMessage(content=""),
+                            message=AssistantPromptMessage(
+                                content="", tool_calls=tool_calls
+                            ),
                             usage=usage,
                             finish_reason=finish_reason
                         )
@@ -279,8 +316,15 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
             elif hasattr(message, 'content') and message.content:
                 message_dict["content"] = message.content
             
-            function_call = self._extract_response_function_call(message.function_call)
-            tool_calls = [function_call] if function_call else []
+            response_tool_calls = getattr(message, "tool_calls", None)
+            if response_tool_calls:
+                tool_calls = self._extract_response_tool_calls(response_tool_calls)
+            else:
+                # Keep response compatibility with legacy gateways.
+                function_call = self._extract_response_function_call(
+                    getattr(message, "function_call", None)
+                )
+                tool_calls = [function_call] if function_call else []
             
             assistant_message = AssistantPromptMessage(
                 content=message_dict.get("content"),
@@ -291,11 +335,19 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
             completion_tokens = 0
             
             if response.usage:
-                prompt_tokens = response.usage.prompt_tokens
-                completion_tokens = response.usage.completion_tokens
+                prompt_tokens = (
+                    response.usage.prompt_tokens
+                )
+                completion_tokens = (
+                    response.usage.completion_tokens
+                )
             else:
-                prompt_tokens = self._num_tokens_from_messages(request_params.get("model"), prompt_messages)
-                completion_tokens = self._num_tokens_from_messages(request_params.get("model"), [assistant_message])
+                prompt_tokens = (
+                    self._num_tokens_from_messages(request_params.get("model"), prompt_messages)
+                )
+                completion_tokens = (
+                    self._num_tokens_from_messages(request_params.get("model"), [assistant_message])
+                )
 
             usage = self._calc_response_usage(
                 request_params.get("model"), credentials, prompt_tokens, completion_tokens
@@ -453,18 +505,30 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
         elif isinstance(message, AssistantPromptMessage):
             message_dict = {"role": "assistant", "content": message.content}
             if message.tool_calls:
-                function_call = message.tool_calls[0]
-                message_dict["function_call"] = {
-                    "name": function_call.function.name,
-                    "arguments": function_call.function.arguments,
-                }
+                message_dict["tool_calls"] = [
+                    {
+                        "id": tool_call.id,
+                        "type": tool_call.type or "function",
+                        "function": {
+                            "name": tool_call.function.name,
+                            "arguments": tool_call.function.arguments,
+                        },
+                    }
+                    for tool_call in message.tool_calls
+                ]
+        elif isinstance(message, ToolPromptMessage):
+            message_dict = {
+                "role": "tool",
+                "content": message.content,
+                "tool_call_id": message.tool_call_id,
+            }
         else:
             message_dict = {
                 "role": message.role.value,
                 "content": message.content
             }
 
-        if message.name:
+        if message.name and message_dict.get("role") != "tool":
             message_dict["name"] = message.name
 
         return message_dict
@@ -486,6 +550,73 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
             )
         return tool_call
 
+    def _extract_response_tool_calls(
+        self, response_tool_calls
+    ) -> list[AssistantPromptMessage.ToolCall]:
+        """Convert OpenAI SDK tool calls into Dify tool-call entities."""
+        tool_calls = []
+        for response_tool_call in response_tool_calls or []:
+            function = getattr(response_tool_call, "function", None)
+            if not function:
+                continue
+            function_name = getattr(function, "name", "") or ""
+            tool_calls.append(
+                AssistantPromptMessage.ToolCall(
+                    id=(
+                        getattr(response_tool_call, "id", "")
+                        or f"call_{uuid.uuid4().hex}"
+                    ),
+                    type=getattr(response_tool_call, "type", "") or "function",
+                    function=AssistantPromptMessage.ToolCall.ToolCallFunction(
+                        name=function_name,
+                        arguments=getattr(function, "arguments", "") or "",
+                    ),
+                )
+            )
+        return tool_calls
+
+    def _merge_response_tool_call_deltas(
+        self,
+        response_tool_calls,
+        storage: dict[int, AssistantPromptMessage.ToolCall],
+    ) -> None:
+        """Merge streamed tool-call fragments, including multiple tool calls."""
+        for fallback_index, response_tool_call in enumerate(response_tool_calls):
+            index = getattr(response_tool_call, "index", None)
+            if index is None:
+                index = fallback_index
+
+            function = getattr(response_tool_call, "function", None)
+            # Legacy `function_call` deltas have no outer function object.
+            if function is None:
+                function = response_tool_call
+
+            if index not in storage:
+                storage[index] = AssistantPromptMessage.ToolCall(
+                    id=getattr(response_tool_call, "id", "") or "",
+                    type=getattr(response_tool_call, "type", "") or "function",
+                    function=AssistantPromptMessage.ToolCall.ToolCallFunction(
+                        name="", arguments=""
+                    ),
+                )
+
+            tool_call = storage[index]
+            tool_call_id = getattr(response_tool_call, "id", None)
+            if tool_call_id:
+                tool_call.id = tool_call_id
+            tool_call_type = getattr(response_tool_call, "type", None)
+            if tool_call_type:
+                tool_call.type = tool_call_type
+
+            function_name = getattr(function, "name", None)
+            if function_name:
+                tool_call.function.name = function_name
+                if not tool_call.id:
+                    tool_call.id = f"call_{uuid.uuid4().hex}"
+            function_arguments = getattr(function, "arguments", None)
+            if function_arguments:
+                tool_call.function.arguments += function_arguments
+
     def validate_credentials(self, model: str, credentials: dict) -> None:
         """
         Validate model credentials using OpenAI SDK
@@ -495,11 +626,11 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
         :return:
         """
         try:
-            api_key = credentials.get("openai_api_key")
-            if not api_key:
+            key = credentials.get("openai_api_key")
+            if not key:
                 raise CredentialsValidateFailedError("API Key is required")
 
-            client = self._get_client(api_key)
+            client = self._get_client(key)
             test_response = client.chat.completions.create(
                 model=model,
                 messages=[{"role": "user", "content": "Hello"}],

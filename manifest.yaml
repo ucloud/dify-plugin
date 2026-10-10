@@ -1,7 +1,9 @@
-version: 0.0.5
+version: 0.0.7
 type: plugin
 author: ucloud
 name: "ucloud"
+repo: https://github.com/ucloud/dify-plugin
+contact: jafengmei@gmail.com
 label:
   en_US: UCloud
   ja_JP: UCloud

@@ -19,12 +19,12 @@ class ModelverseModelProvider(ModelProvider):
         try:
             import openai
 
-            api_key = credentials.get("openai_api_key")
-            if not api_key:
+            key = credentials.get("openai_api_key")
+            if not key:
                 raise CredentialsValidateFailedError("API Key is required")
 
             client = openai.OpenAI(
-                api_key=api_key,
+                api_key=key,
                 base_url="https://api.modelverse.cn/v1"
             )
             models_response = client.models.list()

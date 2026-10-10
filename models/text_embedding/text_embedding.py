@@ -48,17 +48,19 @@ class UcloudMaasTextEmbeddingModel(TextEmbeddingModel):
         user: Optional[str] = None,
         input_type: EmbeddingInputType = EmbeddingInputType.DOCUMENT,
     ) -> TextEmbeddingResult:
-        api_key = credentials.get("openai_api_key")
-        if not api_key:
+        key = credentials.get("openai_api_key")
+        if not key:
             raise CredentialsValidateFailedError("API Key is required")
 
-        client = self._get_client(api_key)
+        client = self._get_client(key)
         context_size = self._get_context_size(model, credentials)
         max_chunks = self._get_max_chunks(model, credentials)
 
         inputs = []
         for text in texts:
-            num_tokens = self._get_num_tokens_for_text(model, text)
+            num_tokens = (
+                self._get_num_tokens_for_text(model, text)
+            )
             if num_tokens >= context_size:
                 cutoff = int(len(text) * (context_size / num_tokens))
                 inputs.append(text[:cutoff])
@@ -110,11 +112,11 @@ class UcloudMaasTextEmbeddingModel(TextEmbeddingModel):
 
     def validate_credentials(self, model: str, credentials: dict) -> None:
         try:
-            api_key = credentials.get("openai_api_key")
-            if not api_key:
+            key = credentials.get("openai_api_key")
+            if not key:
                 raise CredentialsValidateFailedError("API Key is required")
 
-            client = self._get_client(api_key)
+            client = self._get_client(key)
             response = client.embeddings.create(
                 model=model,
                 input=["ping"],
