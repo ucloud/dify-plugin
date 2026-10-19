@@ -74,7 +74,7 @@ parameter_rules:
     max: 65535
   - name: response_format
     use_template: response_format
-pricing:
+{thinking_rule}pricing:
   input: '0.004'
   output: '0.016'
   unit: '0.001'
@@ -140,6 +140,145 @@ def model_id_to_label(model_id: str) -> str:
     return model_id
 
 
+THINKING_OBJECT = """  - name: thinking
+    label:
+      zh_Hans: 思考模式
+      en_US: Thinking Mode
+    type: string
+    help:
+      zh_Hans: 控制是否开启思考模式（thinking.type）。enabled 强制开启，disabled 强制关闭。
+      en_US: Controls thinking mode (thinking.type). enabled forces it on, disabled forces it off.
+    required: false
+    default: enabled
+    options:
+      - enabled
+      - disabled
+"""
+
+THINKING_DOUBAO = """  - name: thinking
+    label:
+      zh_Hans: 思考模式
+      en_US: Thinking Mode
+    type: string
+    help:
+      zh_Hans: 控制思考模式（thinking.type）。enabled 强制开启，disabled 强制关闭，auto 由模型自行判断。
+      en_US: Controls thinking mode (thinking.type). enabled forces it on, disabled forces it off, auto lets the model decide.
+    required: false
+    default: enabled
+    options:
+      - enabled
+      - disabled
+      - auto
+"""
+
+THINKING_MINIMAX_M3 = """  - name: thinking
+    label:
+      zh_Hans: 思考模式
+      en_US: Thinking Mode
+    type: string
+    help:
+      zh_Hans: 控制思考模式（thinking.type）。adaptive 自适应开启（默认），disabled 关闭思考。
+      en_US: Controls thinking mode (thinking.type). adaptive enables it (default), disabled turns it off.
+    required: false
+    default: adaptive
+    options:
+      - adaptive
+      - disabled
+"""
+
+ENABLE_THINKING_ON = """  - name: enable_thinking
+    label:
+      zh_Hans: 思考模式
+      en_US: Thinking Mode
+    type: boolean
+    help:
+      zh_Hans: 是否开启思考模式（enable_thinking）。关闭后模型直接回答，可降低延迟与 Token 消耗。
+      en_US: Whether to enable thinking (enable_thinking). Disable it to reduce latency and token usage.
+    required: false
+    default: true
+"""
+
+ENABLE_THINKING_OFF = """  - name: enable_thinking
+    label:
+      zh_Hans: 思考模式
+      en_US: Thinking Mode
+    type: boolean
+    help:
+      zh_Hans: 是否开启思考模式（enable_thinking）。关闭后模型直接回答，可降低延迟与 Token 消耗。
+      en_US: Whether to enable thinking (enable_thinking). Disable it to reduce latency and token usage.
+    required: false
+    default: false
+"""
+
+# Models exposing a `thinking.type` switch (enabled / disabled).
+THINKING_SWITCH_MODELS = {
+    "deepseek-v4-1-flash",
+    "deepseek-v4-1-flash-1017",
+    "deepseek-v4-flash-0731",
+    "deepseek-v4-flash-0731-sg",
+    "deepseek-v4-pro-0813",
+    "deepseek-v4-pro-0813-sg",
+    "deepseek-v4-pro-sg",
+    "glm-5-2",
+    "glm-5-2-sg",
+    "kimi-k2-6",
+    "lingdt-3-0-flash",
+    "mimo-v2-5",
+    "mimo-v2-5-pro",
+    "mimo-v2-6-flash",
+    "mimo-v2-6-pro",
+    "zai-org-glm-4-6",
+    "zai-org-glm-4-6v",
+    "zai-org-glm-4-7",
+}
+
+# Doubao Seed models additionally support `thinking.type=auto`.
+THINKING_DOUBAO_MODELS = {
+    "doubao-seed-2-0-lite-260215",
+    "doubao-seed-2-0-mini-260215",
+    "doubao-seed-2-0-pro-260215",
+    "doubao-seed-2-1-lite-260915",
+    "doubao-seed-2-1-pro-260628",
+    "doubao-seed-2-1-turbo-260628",
+    "doubao-seed-evolving",
+}
+
+# Qwen hybrid-thinking models: thinking is on by default.
+QWEN_THINKING_ON_MODELS = {
+    "qwen3-5-plus",
+    "qwen3-6-35b-a3b",
+    "qwen3-6-plus",
+    "qwen3-7-max",
+    "qwen3-7-plus",
+    "qwen3-8-max",
+}
+
+# Qwen / ERNIE hybrid models: thinking is off by default.
+QWEN_THINKING_OFF_MODELS = {
+    "qwen-qwen3-max",
+    "qwen3-max-preview",
+    "qwen3-vl-flash",
+    "baidu-ernie-4-5-turbo-128k",
+    "baidu-ernie-4-5-turbo-vl-32k",
+}
+
+
+def thinking_rule_for(model_id: str) -> str:
+    """Return the thinking-mode parameter rule block for a model."""
+    key = model_id_to_filename(model_id)[:-len(".yaml")]
+    if key in THINKING_SWITCH_MODELS:
+        return THINKING_OBJECT
+    if key in THINKING_DOUBAO_MODELS:
+        return THINKING_DOUBAO
+    if key == "minimax-m3":
+        return THINKING_MINIMAX_M3
+    if key in QWEN_THINKING_ON_MODELS:
+        return ENABLE_THINKING_ON
+    if key in QWEN_THINKING_OFF_MODELS:
+        return ENABLE_THINKING_OFF
+    return ""
+
+
 def main():
     models = fetch_models()
     print(f"Fetched {len(models)} models from API")
@@ -182,6 +321,7 @@ def main():
         content = YAML_TEMPLATE.format(
             model_id=model_id, label=label,
             context_size=context_size, default_max_tokens=default_max_tokens,
+            thinking_rule=thinking_rule_for(model_id),
         )
         filepath = os.path.join(OUTPUT_DIR, filename)
         with open(filepath, "w") as f:

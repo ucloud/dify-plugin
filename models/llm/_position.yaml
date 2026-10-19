@@ -7,6 +7,7 @@
 - deepseek-v4-pro-0813-sg
 - deepseek-v4-pro-sg
 - deepseek-v4.1-flash
+- deepseek-v4.1-flash-1017
 - doubao-seed-2-0-lite-260215
 - doubao-seed-2-0-mini-260215
 - doubao-seed-2-0-pro-260215
@@ -21,8 +22,6 @@
 - kimi-k2.6
 - kimi-k3
 - LingDT-3.0-flash
-- mimo-v2.5
-- mimo-v2.5-pro
 - mimo-v2.6-flash
 - mimo-v2.6-pro
 - MiniMax-M2.5
@@ -31,8 +30,6 @@
 - MiniMax-M2.7-highspeed
 - MiniMax-M3
 - qwen-mt-flash
-- Qwen/Qwen3-30B-A3B-Thinking
-- Qwen/Qwen3-Max
 - Qwen/Qwen3-VL-235B-A22B-Instruct
 - qwen3-max-preview
 - qwen3-vl-flash

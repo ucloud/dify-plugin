@@ -76,12 +76,26 @@ class UcloudMaasLargeLanguageModel(LargeLanguageModel):
 
         messages = [self._convert_prompt_message_to_dict(m) for m in prompt_messages]
 
+        # Thinking-mode switches are not part of the OpenAI SDK signature, so
+        # they must be sent through `extra_body`.
+        extra_body: dict = {}
+        thinking = model_parameters.pop("thinking", None)
+        if thinking is not None:
+            extra_body["thinking"] = thinking if isinstance(thinking, dict) else {"type": thinking}
+        for key in ("enable_thinking", "thinking_enabled"):
+            value = model_parameters.pop(key, None)
+            if value is not None:
+                extra_body[key] = value
+
         request_params = {
             "model": model,
             "messages": messages,
             "stream": stream,
             **model_parameters
         }
+
+        if extra_body:
+            request_params["extra_body"] = extra_body
 
         if tools:
             # Dify uses the current tool-calling message format (assistant

@@ -1,0 +1,160 @@
+model: qwen3-tts-flash
+label:
+  zh_Hans: qwen3-tts-flash
+  en_US: qwen3-tts-flash
+model_type: tts
+model_properties:
+  default_voice: "Cherry"
+  word_limit: 600
+  audio_type: "wav"
+  max_workers: 4
+  voices:
+    - mode: "Cherry"
+      name: "芊悦 (Cherry)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Serena"
+      name: "苏瑶 (Serena)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Ethan"
+      name: "晨煦 (Ethan)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Chelsie"
+      name: "千雪 (Chelsie)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Momo"
+      name: "茉兔 (Momo)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Vivian"
+      name: "十三 (Vivian)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Moon"
+      name: "月白 (Moon)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Maia"
+      name: "四月 (Maia)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Kai"
+      name: "凯 (Kai)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Nofish"
+      name: "不吃鱼 (Nofish)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Bella"
+      name: "萌宝 (Bella)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Jennifer"
+      name: "詹妮弗 (Jennifer)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Ryan"
+      name: "甜茶 (Ryan)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Katerina"
+      name: "卡捷琳娜 (Katerina)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Aiden"
+      name: "艾登 (Aiden)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Eldric Sage"
+      name: "沧明子 (Eldric Sage)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Mia"
+      name: "乖小妹 (Mia)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Mochi"
+      name: "沙小弥 (Mochi)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Bellona"
+      name: "燕铮莺 (Bellona)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Vincent"
+      name: "田叔 (Vincent)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Bunny"
+      name: "萌小姬 (Bunny)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Neil"
+      name: "阿闻 (Neil)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Elias"
+      name: "墨讲师 (Elias)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Arthur"
+      name: "徐大爷 (Arthur)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Nini"
+      name: "邻家妹妹 (Nini)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Seren"
+      name: "小婉 (Seren)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Pip"
+      name: "顽屁小孩 (Pip)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Stella"
+      name: "少女阿月 (Stella)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Bodega"
+      name: "博德加 (Bodega)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Sonrisa"
+      name: "索尼莎 (Sonrisa)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Alek"
+      name: "阿列克 (Alek)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Dolce"
+      name: "多尔切 (Dolce)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Sohee"
+      name: "素熙 (Sohee)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Ono Anna"
+      name: "小野杏 (Ono Anna)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Lenn"
+      name: "莱恩 (Lenn)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Emilien"
+      name: "埃米尔安 (Emilien)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Andre"
+      name: "安德雷 (Andre)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Radio Gol"
+      name: "拉迪奥·戈尔 (Radio Gol)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Jada"
+      name: "上海-阿珍 (Jada)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Dylan"
+      name: "北京-晓东 (Dylan)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Li"
+      name: "南京-老李 (Li)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Marcus"
+      name: "陕西-秦川 (Marcus)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Roy"
+      name: "闽南-阿杰 (Roy)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Peter"
+      name: "天津-李彼得 (Peter)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Sunny"
+      name: "四川-晴儿 (Sunny)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Eric"
+      name: "四川-程川 (Eric)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Rocky"
+      name: "粤语-阿强 (Rocky)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+    - mode: "Kiki"
+      name: "粤语-阿清 (Kiki)"
+      language: ["zh-Hans", "en-US", "ja-JP", "ko-KR", "fr-FR", "de-DE", "ru-RU", "it-IT", "es-ES", "pt-PT"]
+pricing:
+  input: '0.08'
+  output: '0.08'
+  unit: '0.001'
+  currency: CNY

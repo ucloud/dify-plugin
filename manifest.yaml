@@ -23,7 +23,7 @@ resource:
       llm: true
       text_embedding: true
       rerank: false
-      tts: false
+      tts: true
       speech2text: false
       moderation: false
 plugins:

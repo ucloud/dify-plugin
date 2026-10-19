@@ -28,6 +28,20 @@ parameter_rules:
     max: 65535
   - name: response_format
     use_template: response_format
+  - name: thinking
+    label:
+      zh_Hans: 思考模式
+      en_US: Thinking Mode
+    type: string
+    help:
+      zh_Hans: 控制思考模式（thinking.type）。enabled 强制开启，disabled 强制关闭，auto 由模型自行判断。
+      en_US: Controls thinking mode (thinking.type). enabled forces it on, disabled forces it off, auto lets the model decide.
+    required: false
+    default: enabled
+    options:
+      - enabled
+      - disabled
+      - auto
 pricing:
   input: '0.0006'
   output: '0.0036'

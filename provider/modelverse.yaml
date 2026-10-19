@@ -18,6 +18,7 @@ help:
 supported_model_types:
   - llm
   - text-embedding
+  - tts
 configurate_methods:
   - predefined-model
   - customizable-model
@@ -55,9 +56,13 @@ models:
   text_embedding:
     predefined:
       - "models/text_embedding/*.yaml"
+  tts:
+    predefined:
+      - "models/tts/*.yaml"
 extra:
   python:
     provider_source: provider/modelverse.py
     model_sources:
       - "models/llm/llm.py"
       - "models/text_embedding/text_embedding.py"
+      - "models/tts/tts.py"
