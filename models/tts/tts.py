@@ -13,7 +13,8 @@ from dify_plugin.errors.model import (
 )
 
 BASE_URL = "https://api.modelverse.cn/v1"
-REQUEST_TIMEOUT = 120
+REQUEST_CONNECT_TIMEOUT = 10
+REQUEST_READ_TIMEOUT = 300
 
 
 class RateLimitError(Exception):
@@ -94,7 +95,7 @@ class Qwen3TTSModel(TTSModel):
                     "Content-Type": "application/json",
                 },
                 json=payload,
-                timeout=REQUEST_TIMEOUT,
+                timeout=(REQUEST_CONNECT_TIMEOUT, REQUEST_READ_TIMEOUT),
             )
         except requests.exceptions.Timeout as ex:
             raise ConnectionError(f"Request timed out: {ex!s}") from ex
@@ -137,7 +138,7 @@ class Qwen3TTSModel(TTSModel):
             try:
                 audio_response = requests.get(
                     audio["url"],
-                    timeout=REQUEST_TIMEOUT,
+                    timeout=(REQUEST_CONNECT_TIMEOUT, REQUEST_READ_TIMEOUT),
                 )
                 audio_response.raise_for_status()
             except requests.exceptions.RequestException as ex:
