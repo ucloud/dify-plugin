@@ -1,0 +1,45 @@
+model: qwen3.8-max
+label:
+  zh_Hans: qwen3.8-max
+  en_US: qwen3.8-max
+model_type: llm
+features:
+  - multi-tool-call
+  - agent-thought
+  - stream-tool-call
+  - vision
+  - tool-call
+model_properties:
+  mode: chat
+  context_size: 1048576
+parameter_rules:
+  - name: temperature
+    use_template: temperature
+  - name: top_p
+    use_template: top_p
+  - name: presence_penalty
+    use_template: presence_penalty
+  - name: frequency_penalty
+    use_template: frequency_penalty
+  - name: max_tokens
+    use_template: max_tokens
+    default: 16000
+    min: 1
+    max: 65535
+  - name: response_format
+    use_template: response_format
+  - name: enable_thinking
+    label:
+      zh_Hans: 思考模式
+      en_US: Thinking Mode
+    type: boolean
+    help:
+      zh_Hans: 是否开启思考模式（enable_thinking）。关闭后模型直接回答，可降低延迟与 Token 消耗。
+      en_US: Whether to enable thinking (enable_thinking). Disable it to reduce latency and token usage.
+    required: false
+    default: true
+pricing:
+  input: '0.012'
+  output: '0.036'
+  unit: '0.001'
+  currency: CNY
